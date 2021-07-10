@@ -29,16 +29,34 @@ User::User(const std::string & username)
 
   auto obj = json::parse(ss.str());
 
-  if (obj.at("name").is_string()) {
+  if (obj.contains("name") && obj.at("name").is_string()) {
     obj.at("name").get_to(name);
   } else {
     name = "null";
   }
 
-  if (obj.at("email").is_string()) {
+  if (obj.contains("email") && obj.at("email").is_string()) {
     obj.at("email").get_to(email);
   } else {
     email = "null";
+  }
+
+  if (obj.contains("stars") && obj.at("stars").is_number()) {
+    obj.at("stars").get_to(stars);
+  } else {
+    stars = 0;
+  }
+
+  if (obj.contains("followers") && obj.at("followers").is_number()) {
+    obj.at("followers").get_to(followers);
+  } else {
+    followers = 0;
+  }
+
+  if (obj.contains("following") && obj.at("following").is_number()) {
+    obj.at("following").get_to(following);
+  } else {
+    following = 0;
   }
 }
 
@@ -48,11 +66,11 @@ std::ostream & operator<<(std::ostream & output, const User & user)
     "Name: " << user.name <<
     "\nEmail: " << user.email <<
     "\nStars: " << user.stars <<
-    "Followers: " << user.followers <<
-    "Following: " << user.following;
+    " Followers: " << user.followers <<
+    " Following: " << user.following;
 }
 
-json User::dump()
+json User::to_json()
 {
   json obj;
 

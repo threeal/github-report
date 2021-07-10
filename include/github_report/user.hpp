@@ -15,7 +15,7 @@ public:
 
   friend std::ostream & operator<<(std::ostream & output, const User & user);
 
-  nlohmann::json dump();
+  nlohmann::json to_json();
 
   std::string name;
   std::string email;
