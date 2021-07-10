@@ -17,6 +17,12 @@ endif()
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(CURLPP REQUIRED IMPORTED_TARGET curlpp)
 
-add_executable(github_report "src/github_report.cpp")
-target_include_directories(github_report PUBLIC ${CURLPP_INCLUDE_DIRS})
+add_executable(github_report
+  "src/github_report/user.cpp"
+  "src/github_report.cpp")
+
+target_include_directories(github_report PUBLIC
+  "include"
+  ${CURLPP_INCLUDE_DIRS})
+
 target_link_libraries(github_report PUBLIC ${CURLPP_LIBRARIES})
