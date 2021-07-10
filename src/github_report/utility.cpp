@@ -23,4 +23,30 @@ Json request_json(const std::string & url, const std::list<std::string> & header
   return Json::parse(ss.str());
 }
 
+std::string get_string_or(
+  const Json & json, const std::string & key, const std::string & default_value)
+{
+  if (json.contains(key)) {
+    auto & ref = json.at(key);
+    if (ref.is_string()) {
+      return ref.get<std::string>();
+    }
+  }
+
+  return default_value;
+}
+
+int get_integer_or(
+  const Json & json, const std::string & key, const int & default_value)
+{
+  if (json.contains(key)) {
+    auto & ref = json.at(key);
+    if (ref.is_number()) {
+      return ref.get<int>();
+    }
+  }
+
+  return default_value;
+}
+
 }  // namespace github_report
