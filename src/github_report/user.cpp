@@ -11,7 +11,8 @@ User::User(const std::string & username)
   email("null"),
   stars(0),
   followers(0),
-  following(0)
+  following(0),
+  repos({})
 {
   try {
     auto json = request_json("https://api.github.com/users/" + username);
@@ -32,16 +33,38 @@ User::User(const std::string & username)
   } catch (const std::exception & e) {
     std::cout << "Warning! " << e.what() << std::endl;
   }
+
+  try {
+    auto json = request_json("https://api.github.com/users/" + username + "/repos");
+    if (json.is_array()) {
+      for (const auto & obj : json) {
+        Repo repo;
+
+        repo.name = get_string_or(obj, "name", repo.name);
+
+        repos.push_back(repo);
+      }
+    }
+  } catch (const std::exception & e) {
+    std::cout << "Warning! " << e.what() << std::endl;
+  }
 }
 
 std::ostream & operator<<(std::ostream & output, const User & user)
 {
-  return output <<
+  output <<
     "Name: " << user.name <<
     "\nEmail: " << user.email <<
     "\nStars: " << user.stars <<
     " Followers: " << user.followers <<
     " Following: " << user.following;
+
+  output << "\n\nRepositories:";
+  for (const auto & repo : user.repos) {
+    output << "\n- " << repo;
+  }
+
+  return output;
 }
 
 Json User::to_json() const
@@ -53,6 +76,10 @@ Json User::to_json() const
   json["stars"] = stars;
   json["followers"] = followers;
   json["following"] = following;
+
+  for (const auto & repo : repos) {
+    json["repos"].push_back(repo.to_json());
+  }
 
   return json;
 }

@@ -2,7 +2,9 @@
 #define GITHUB_REPORT__USER_HPP_
 
 #include <string>
+#include <list>
 
+#include "./repo.hpp"
 #include "./utility.hpp"
 
 namespace github_report
@@ -23,6 +25,8 @@ public:
   int stars;
   int followers;
   int following;
+
+  std::list<Repo> repos;
 };
 
 }  // namespace github_report
