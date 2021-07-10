@@ -21,6 +21,7 @@ pkg_check_modules(CURLPP REQUIRED IMPORTED_TARGET curlpp)
 
 add_executable(github_report
   "src/github_report/user.cpp"
+  "src/github_report/utility.cpp"
   "src/github_report.cpp")
 
 target_include_directories(github_report PUBLIC

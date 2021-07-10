@@ -1,7 +1,3 @@
-#include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Exception.hpp>
-#include <curlpp/Options.hpp>
 #include <github_report/user.hpp>
 
 #include <sstream>
@@ -9,52 +5,40 @@
 namespace github_report
 {
 
-using nlohmann::json;
-
 User::User(const std::string & username)
 {
-  curlpp::Cleanup cleaner;
-  curlpp::Easy request;
+  auto json = request_json(
+    "https://api.github.com/users/" + username,
+    {
+      "User-Agent: github-report"
+    });
 
-  request.setOpt<curlpp::options::Url>(
-    "https://api.github.com/users/" + username);
-
-  request.setOpt<curlpp::options::HttpHeader>({
-    "User-Agent: github-report"
-  });
-
-  std::stringstream ss;
-
-  ss << request;
-
-  auto obj = json::parse(ss.str());
-
-  if (obj.contains("name") && obj.at("name").is_string()) {
-    obj.at("name").get_to(name);
+  if (json.contains("name") && json.at("name").is_string()) {
+    json.at("name").get_to(name);
   } else {
     name = "null";
   }
 
-  if (obj.contains("email") && obj.at("email").is_string()) {
-    obj.at("email").get_to(email);
+  if (json.contains("email") && json.at("email").is_string()) {
+    json.at("email").get_to(email);
   } else {
     email = "null";
   }
 
-  if (obj.contains("stars") && obj.at("stars").is_number()) {
-    obj.at("stars").get_to(stars);
+  if (json.contains("stars") && json.at("stars").is_number()) {
+    json.at("stars").get_to(stars);
   } else {
     stars = 0;
   }
 
-  if (obj.contains("followers") && obj.at("followers").is_number()) {
-    obj.at("followers").get_to(followers);
+  if (json.contains("followers") && json.at("followers").is_number()) {
+    json.at("followers").get_to(followers);
   } else {
     followers = 0;
   }
 
-  if (obj.contains("following") && obj.at("following").is_number()) {
-    obj.at("following").get_to(following);
+  if (json.contains("following") && json.at("following").is_number()) {
+    json.at("following").get_to(following);
   } else {
     following = 0;
   }
@@ -70,17 +54,17 @@ std::ostream & operator<<(std::ostream & output, const User & user)
     " Following: " << user.following;
 }
 
-json User::to_json()
+Json User::to_json() const
 {
-  json obj;
+  Json json;
 
-  obj["name"] = name;
-  obj["email"] = email;
-  obj["stars"] = stars;
-  obj["followers"] = followers;
-  obj["following"] = following;
+  json["name"] = name;
+  json["email"] = email;
+  json["stars"] = stars;
+  json["followers"] = followers;
+  json["following"] = following;
 
-  return obj;
+  return json;
 }
 
 }  // namespace github_report

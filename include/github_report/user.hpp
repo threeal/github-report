@@ -1,9 +1,9 @@
 #ifndef GITHUB_REPORT__USER_HPP_
 #define GITHUB_REPORT__USER_HPP_
 
-#include <nlohmann/json.hpp>
-
 #include <string>
+
+#include "./utility.hpp"
 
 namespace github_report
 {
@@ -15,7 +15,7 @@ public:
 
   friend std::ostream & operator<<(std::ostream & output, const User & user);
 
-  nlohmann::json to_json();
+  Json to_json() const;
 
   std::string name;
   std::string email;
