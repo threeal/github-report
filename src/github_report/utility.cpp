@@ -9,12 +9,14 @@
 namespace github_report
 {
 
-Json request_json(const std::string & url, const std::list<std::string> & headers)
+Json request_json(const std::string & url, std::list<std::string> headers)
 {
   curlpp::Cleanup cleaner;
   curlpp::Easy request;
 
   request.setOpt<curlpp::options::Url>(url);
+
+  headers.push_back("User-Agent: github-report");
   request.setOpt<curlpp::options::HttpHeader>(headers);
 
   std::stringstream ss;

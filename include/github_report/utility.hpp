@@ -9,7 +9,7 @@ namespace github_report
 {
   using Json = nlohmann::json;
 
-  Json request_json(const std::string & url, const std::list<std::string> & headers = {});
+  Json request_json(const std::string & url, std::list<std::string> headers = {});
 
   std::string get_string_or(
     const Json & json, const std::string & key, const std::string & default_value = "null");

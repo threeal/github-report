@@ -35,11 +35,11 @@ int main(int argc, char ** argv)
       } else {
         std::cout << user << std::endl;
       }
-    } catch (std::exception & e) {
+    } catch (const std::exception & e) {
       std::cout << e.what() << std::endl;
       return 1;
     }
-  } catch (std::exception & e) {
+  } catch (const std::exception & e) {
     std::cout << e.what() << std::endl;
     std::cout << program << std::endl;
     return 1;

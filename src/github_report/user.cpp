@@ -1,23 +1,37 @@
 #include <github_report/user.hpp>
 
+#include <iostream>
 #include <sstream>
 
 namespace github_report
 {
 
 User::User(const std::string & username)
+: name("null"),
+  email("null"),
+  stars(0),
+  followers(0),
+  following(0)
 {
-  auto json = request_json(
-    "https://api.github.com/users/" + username,
-    {
-      "User-Agent: github-report"
-    });
+  try {
+    auto json = request_json("https://api.github.com/users/" + username);
 
-  name = get_string_or(json, "name");
-  email = get_string_or(json, "email");
-  stars = get_integer_or(json, "stars");
-  followers = get_integer_or(json, "followers");
-  following = get_integer_or(json, "following");
+    name = get_string_or(json, "name", name);
+    email = get_string_or(json, "email", email);
+    followers = get_integer_or(json, "followers", followers);
+    following = get_integer_or(json, "following", following);
+  } catch (const std::exception & e) {
+    std::cout << "Warning! " << e.what() << std::endl;
+  }
+
+  try {
+    auto json = request_json("https://api.github.com/users/" + username + "/starred");
+    if (json.is_array()) {
+      stars = json.size();
+    }
+  } catch (const std::exception & e) {
+    std::cout << "Warning! " << e.what() << std::endl;
+  }
 }
 
 std::ostream & operator<<(std::ostream & output, const User & user)
