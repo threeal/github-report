@@ -29,6 +29,11 @@ Run `github_report` program with `-h` options to view the program usage.
   $ make -j8 && make install
   ```
 
+## Example
+
+![Example 1](./img/example_0.png)
+![Example 2](./img/example_1.png)
+
 ## License
 
 This project is licensed under the [MIT license](./LICENSE).
