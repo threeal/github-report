@@ -29,3 +29,6 @@ target_include_directories(github_report PUBLIC
   ${CURLPP_INCLUDE_DIRS})
 
 target_link_libraries(github_report PUBLIC ${CURLPP_LIBRARIES})
+
+install(TARGETS github_report
+  DESTINATION "bin")
